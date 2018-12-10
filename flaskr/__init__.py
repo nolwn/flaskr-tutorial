@@ -2,6 +2,8 @@ import os # used for operating system operations (filepath, etc)
 
 from flask import Flask # importing Flask itself
 
+from . import db # import our own db module
+
 # Application factory function. Sets up the app somehow. test_config=None is a
 # default parameter, NOT a kwarg related thing. In a testing environment, a
 # configuration file will get passed in here.
@@ -10,7 +12,7 @@ def create_app(test_config=None):
     # "creates an instance of flask. __name__ is the name of the current Python
     # module. The app needs to know where it's located to set up some paths, and
     # __name__ is a convinient way to tell it that." – Flask documentation
-    app = Flask(__name__, instance_relatice_config=True)
+    app = Flask(__name__, instance_relative_config=True)
 
     # Makes file paths relative to instance. The instance is "/flaskr_tutorial."
     app.config.from_mapping(
@@ -28,7 +30,7 @@ def create_app(test_config=None):
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True) # load our config.py
     else: # i.e., we did recieve a testing config.
-        app.config.from.from_mapping(test_config) # load that!
+        app.config.from_mapping(test_config) # load that!
 
     # create app isntance path... I don't understand this yet.
     # "ensure the instance folder exists" – Flask documentation
@@ -43,5 +45,7 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+
+    db.init_app(app) #
 
     return app # We returned a configured instance of flask!
